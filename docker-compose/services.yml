@@ -27,31 +27,31 @@ services:
     container_name: 'cassandra'
     networks:
       - ${GLOBAL_NETWORK:-services}
-  product-service:
-    depends_on:
-      - cassandra
-      - kafka1
-    build:
-      context: ..
-    image: ${GROUP_ID}/product.service:${SERVICE_VERSION:-latest}
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
-    networks:
-      - ${GLOBAL_NETWORK:-services}
-    restart: on-failure
-  analytics-service:
-    depends_on:
-      - cassandra
-      - kafka1
-    build:
-      context: ..
-    image: ${GROUP_ID}/analytics.service:${SERVICE_VERSION:-latest}
-    ports:
-      - "8082:8082"
-    environment:
-      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
-    networks:
-      - ${GLOBAL_NETWORK:-services}
-    restart: on-failure
+#  product-service:
+#    depends_on:
+#      - cassandra
+#      - kafka1
+#    build:
+#      context: ..
+#    image: ${GROUP_ID}/product.service:${SERVICE_VERSION:-latest}
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
+#    networks:
+#      - ${GLOBAL_NETWORK:-services}
+#    restart: on-failure
+#  analytics-service:
+#    depends_on:
+#      - cassandra
+#      - kafka1
+#    build:
+#      context: ..
+#    image: ${GROUP_ID}/analytics.service:${SERVICE_VERSION:-latest}
+#    ports:
+#      - "8082:8082"
+#    environment:
+#      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
+#    networks:
+#      - ${GLOBAL_NETWORK:-services}
+#    restart: on-failure
