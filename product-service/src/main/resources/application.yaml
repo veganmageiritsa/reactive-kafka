@@ -1,0 +1,17 @@
+spring:
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  cassandra:
+    contact-points: localhost
+    keyspace-name: products
+    port: 9042
+    schema-action: create_if_not_exists
+    local-datacenter: datacenter1
+    entity-base-package: com.nl.productservice
+server:
+  port: 8081

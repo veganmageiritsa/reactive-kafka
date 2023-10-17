@@ -1,0 +1,57 @@
+version: '3.7'
+services:
+#  redis:
+#    image: redis
+#    ports:
+#      - "6379:6379"
+#    networks:
+#      - ${GLOBAL_NETWORK:-services}
+  kafka1:
+    image: vinsdocker/kafka
+    container_name: kafka
+    ports:
+    - "9092:9092"
+    environment:
+      KAFKA_CLUSTER_ID: OTMwNzFhYTY1ODNiNGE5OT
+    volumes:
+    - ./props/server.properties:/kafka/config/kraft/server.properties
+    - ./data:/tmp/kafka-logs
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+  cassandra:
+    image: 'cassandra:latest'
+    ports:
+      - "9042:9042"
+      - "9160:9160"
+      - "7199:7199"
+    container_name: 'cassandra'
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+  product-service:
+    depends_on:
+      - cassandra
+      - kafka1
+    build:
+      context: ..
+    image: ${GROUP_ID}/product.service:${SERVICE_VERSION:-latest}
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+    restart: on-failure
+  analytics-service:
+    depends_on:
+      - cassandra
+      - kafka1
+    build:
+      context: ..
+    image: ${GROUP_ID}/analytics.service:${SERVICE_VERSION:-latest}
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+    restart: on-failure
